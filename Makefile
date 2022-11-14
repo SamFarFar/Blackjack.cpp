@@ -1,5 +1,5 @@
 makejack:
-	g++ main.cpp Game.h
+	g++ main.cpp -o blackjack
 
-blackjack:
-	./a.out
+all:
+	./blackjack

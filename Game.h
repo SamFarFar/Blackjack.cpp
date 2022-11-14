@@ -1,67 +1,80 @@
+#ifndef GAME
+#define GAME
+
 #include <stdlib.h>
 #include <string>
+#include <cstdlib>
+
 #include <string.h>
 #include <iostream>
+#include <vector>
+#include "Player.h"
 #define TOTAL_CARDS 13
 #define SUITS 4
 class Game
 {
 private:
     int numPlayers;
-    std::string cards[TOTAL_CARDS][SUITS];
-
+    int deck[TOTAL_CARDS][SUITS];
+    int cards_left;
+    std::vector<Player> players;
+    // rand()
 public:
-    Game(int np);
     Game();
     ~Game();
-    void cardSetter();
+    void freshDeck();
     void cardPrinter();
+    void init(int np);
+    void updateCardCount();
+    void drawCard(Player &p);
 };
 
-Game::Game(int np)
+void Game::init(int np)
 {
     numPlayers = np;
+    freshDeck();
 }
 Game::Game()
 {
-    numPlayers = 1;
+    numPlayers = 0;
 }
 Game::~Game()
 {
-
+    numPlayers = 0;
+    players.clear();
 }
-
+void Game::drawCard(Player &p)
+{
+}
 void Game::cardPrinter()
 {
     std::cout << "Cards are as follows:" << std::endl;
     for (size_t i = 0; i < SUITS; i++)
     {
         std::cout << "| ";
-        for (size_t j = 0; j <= TOTAL_CARDS; j++)
+        for (size_t j = 0; j < TOTAL_CARDS; j++)
         {
-            std::cout << cards[j][i] << " | ";
+            std::cout << std::to_string(deck[j][i]) << " | ";
         }
         std::cout << std::endl;
     }
 }
-void Game::cardSetter()
+
+void Game::updateCardCount()
 {
-    for (size_t i = 0; i < SUITS; i++)
-    {
-        for (size_t j = 0; j <= TOTAL_CARDS; j++)
-        {
-            if (j == 0)
-                cards[j][i] = 'A';
-            else if (j < 11)
-            {
-                cards[j][i] = std::to_string(j + 1);
-            }
-            else if (j == 11)
-                cards[j][i] = 'J';
-            else if (j == 12)
-                cards[j][i] = 'Q';
-            else if (j == 13)
-                cards[j][i] = 'K';
-        }
-    }
+    int total = 0;
+    for (size_t i = 0; i < TOTAL_CARDS; i++)
+        for (size_t j = 0; j <= SUITS; j++)
+            if (deck[i][j] == 1)
+                total++;
+    cards_left = total;
 }
+void Game::freshDeck()
+{
+    for (size_t i = 0; i < TOTAL_CARDS; i++)
+        for (size_t j = 0; j < SUITS; j++)
+            deck[i][j] = 1;
+    cards_left = 52;
+};
+
+#endif
